@@ -1,0 +1,100 @@
+.table-container {
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  overflow-x: scroll;
+}
+
+.table {
+  width: 100%;
+}
+
+.table__head {
+  background-color: var(--color-bg-alt);
+}
+
+.table__header {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table__body {
+  background: var(--color-bg);
+}
+
+.table__row {
+  transition: background-color 0.2s ease;
+}
+
+.table__row:hover {
+  background-color: var(--color-bg-alt);
+}
+
+.table__cell {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+.table__badge {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table__badge--yes {
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.table__badge--no {
+  background-color: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+.table__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.table__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease;
+}
+
+.table__action-btn--edit {
+  background-color: var(--color-info-bg);
+  color: var(--color-info-text);
+}
+
+.table__action-btn--edit:hover {
+  background-color: var(--color-info-hover);
+}
+
+.table__action-btn--delete {
+  background-color: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+.table__action-btn--delete:hover {
+  background-color: var(--color-error-hover);
+}

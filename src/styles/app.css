@@ -1,0 +1,10 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app__content {
+  flex: 1;
+  background-color: var(--color-bg);
+  overflow-x: auto;
+}

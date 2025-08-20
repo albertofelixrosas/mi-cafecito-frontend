@@ -1,0 +1,217 @@
+/* alberto.estudiante@gmail.com logo de metal slug */
+/*https://chatgpt.com/c/689927a2-de34-8325-8afd-02b23050c64c*/
+:root {
+  /* 🎨 Colores base (los que ya tienes) */
+  --color-primary: #152629;
+  --color-primary-hover: #1f383d;
+  --color-primary-dark: #0b1517;
+  --color-primary-light: #1e3a3e;
+  --color-accent: #1e8c6e;
+  --color-accent-light: #2fa88a;
+  --color-accent-hover: #17735a;
+  --color-accent-contrast: #f2b134;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f5f7f6;
+  --color-text: #1c1c1c;
+  --color-text-muted: #4a4a4a;
+  --color-border: #d9dddb;
+
+  /* ✅ Colores de estado */
+  --color-success: #28a745; /* Verde éxito */
+  --color-success-light: #d4edda; /* Fondo claro de éxito */
+  --color-error: #dc3545; /* Rojo error */
+  --color-error-light: #f8d7da; /* Fondo claro de error */
+  --color-warning: #ffc107; /* Amarillo advertencia */
+  --color-warning-light: #fff3cd; /* Fondo claro de advertencia */
+  --color-info: #17a2b8; /* Azul información */
+  --color-info-light: #d1ecf1; /* Fondo claro de info */
+
+  /* Estados */
+  --color-success-bg: #d4edda;
+  --color-success-text: #155724;
+  --color-success-hover: #c3e6cb;
+
+  --color-error-bg: #f8d7da;
+  --color-error-text: #721c24;
+  --color-error-hover: #f5c6cb;
+
+  --color-warning-bg: #fff3cd;
+  --color-warning-text: #856404;
+  --color-warning-hover: #ffeeba;
+
+  --color-info-bg: #d1ecf1;
+  --color-info-text: #0c5460;
+  --color-info-hover: #bee5eb;
+
+  /* 📏 Espaciado */
+  --space-xxs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-xxl: 3rem;
+
+  /* 🔠 Tipografía */
+  --font-size-xxs: 0.625rem;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2rem;
+  --font-size-xxxl: 2.5rem;
+  --font-family-base: "Roboto Slab", sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+
+  /* ⬜ Bordes */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-round: 9999px;
+
+  /* 🌑 Sombras */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* 🎨 Scrollbar (modo claro) */
+  --color-scrollbar-track: var(--color-bg-alt); /* fondo clarito */
+  --color-scrollbar-thumb: #c1c7c5; /* gris medio */
+  --color-scrollbar-thumb-hover: #a5aaa8; /* más oscuro en hover */
+
+  /* Estado de foco para inputs */
+  --color-focus: #3498db;
+}
+
+/* 🌚 Modo oscuro */
+.dark {
+  --color-primary: #152629;
+  --color-primary-hover: #152629;
+  --color-primary-dark: #0b1517;
+  --color-primary-light: #1e3a3e;
+  --color-accent: #2fa88a;
+  --color-accent-light: #3bc9a8;
+  --color-accent-hover: #249070;
+  --color-accent-contrast: #f2b134;
+  --color-bg: #0b1517;
+  --color-bg-alt: #152629;
+  --color-text: #e4e8e6;
+  --color-text-muted: #a5b0ac;
+  --color-border: #2b3b3f;
+
+  /* ✅ Colores de estado en dark mode */
+  --color-success: #28d17c;
+  --color-success-light: #1b3a2c;
+  --color-error: #ff6b6b;
+  --color-error-light: #3a1b1b;
+  --color-warning: #ffd166;
+  --color-warning-light: #3a321b;
+  --color-info: #4db8ff;
+  --color-info-light: #1b2e3a;
+
+  --color-success-bg: #1e3d2f;
+  --color-success-text: #a6e3b8;
+  --color-success-hover: #295c46;
+
+  --color-error-bg: #3d1e1f;
+  --color-error-text: #f5a5ab;
+  --color-error-hover: #5a2b2d;
+
+  --color-warning-bg: #3d361e;
+  --color-warning-text: #f1e0a0;
+  --color-warning-hover: #5a4f2a;
+
+  --color-info-bg: #1e323d;
+  --color-info-text: #9fd4e1;
+  --color-info-hover: #2b4c5a;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+
+    /* 🎨 Scrollbar (modo oscuro) */
+  --color-scrollbar-track: var(--color-bg-alt); /* fondo oscuro */
+  --color-scrollbar-thumb: #3d4a4c; /* gris más claro que el fondo */
+  --color-scrollbar-thumb-hover: #566264; /* más claro en hover */
+  
+  /* Estado de foco para inputs */
+  --color-focus: #4db8ff; /* un azul más claro que destaque en fondo oscuro */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/*
+SCROLL BAR
+*/
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: var(--radius-md);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+}

@@ -1,0 +1,113 @@
+.dashboard {
+  margin-left: 280px;
+  padding: var(--space-xl);
+  min-height: 100vh;
+}
+
+.dashboard__header {
+  margin-bottom: var(--space-xl);
+}
+
+.dashboard__title {
+  font-size: var(--font-size-xxxl);
+  font-weight: 300;
+  color: var(--color-text);
+  letter-spacing: 1px;
+}
+
+.dashboard__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.dashboard__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-lg);
+}
+
+.dashboard__card {
+  background-color: var(--color-bg);
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dashboard__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.dashboard__card-title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-sm);
+}
+
+.dashboard__card-value {
+  font-size: var(--font-size-xxl);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.dashboard__card-value--warning {
+  color: var(--color-error);
+}
+
+.dashboard__charts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+}
+
+.dashboard__chart {
+  background-color: var(--color-bg);
+  padding: var(--space-xl);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+}
+
+.dashboard__chart-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-lg);
+}
+
+.dashboard__chart-placeholder {
+  height: 300px;
+  background-color: var(--color-bg);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard {
+    margin-left: 70px;
+    padding: var(--space-md);
+  }
+
+  .dashboard__title {
+    font-size: var(--font-size-xxl);
+  }
+
+  .dashboard__cards {
+    grid-template-columns: 1fr;
+  }
+}

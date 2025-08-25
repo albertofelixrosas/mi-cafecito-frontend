@@ -22,3 +22,10 @@ export interface CreateProductRequest {
 export interface UpdateProductRequest extends Partial<CreateProductRequest> {
   productId: number;
 }
+
+export interface FilterProductsDto {
+  name?: string;
+  categoryId?: number;
+  page: number;
+  limit: number;
+}

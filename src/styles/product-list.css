@@ -56,7 +56,6 @@
 }
 
 .product-list {
-  margin-left: 70px;
   padding: 2rem;
   min-height: 100vh;
   display: flex;
@@ -106,7 +105,6 @@
 
 .product-list__loading,
 .product-list__error {
-  margin-left: 280px;
   padding: 2rem;
   text-align: center;
   font-size: 1.125rem;
@@ -156,7 +154,6 @@
   }
   */
   .product-list {
-    margin-left: 280px;
     padding: 2rem;
     min-height: 100vh;
   }

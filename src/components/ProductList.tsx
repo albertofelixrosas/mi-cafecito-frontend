@@ -74,15 +74,13 @@ const ProductList: React.FC = () => {
             onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="form__search">
-          <MdSearch className="form__search-icon" />
-          <input
-            type="text"
-            className="form__search-input"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-          />
+        <div>
+          <label className="form__label" htmlFor="">
+            Buscar por categoría de producto
+          </label>
+          <select className="form__select">
+            <option value="">{'(Sin especificar)'}</option>
+          </select>
         </div>
       </div>
 

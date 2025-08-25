@@ -22,7 +22,7 @@ function App() {
 
         {/* Rutas protegidas con layout de dashboard */}
         <Route
-          path="/dashboard"
+          path="/"
           element={
             <ProtectedRoute>
               <DashboardLayout />

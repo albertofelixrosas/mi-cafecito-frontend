@@ -5,7 +5,7 @@ import {
   MdCategory,
   MdInventory,
   MdWarehouse,
-  MdSwapHoriz,
+  // MdSwapHoriz,
   MdAssessment,
   MdSettings,
   MdClose,
@@ -21,17 +21,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   const menuItems = [
-    { id: 'dashboard', label: 'DASHBOARD', icon: MdDashboard, path: '/dashboard' },
-    { id: 'categorias', label: 'CATEGORÍAS', icon: MdCategory, path: '/dashboard/categorias' },
-    { id: 'productos', label: 'PRODUCTOS', icon: MdInventory, path: '/dashboard/productos' },
-    { id: 'almacenes', label: 'ALMACENES', icon: MdWarehouse, path: '/dashboard/almacenes' },
-    { id: 'movimientos', label: 'MOVIMIENTOS', icon: MdSwapHoriz, path: '/dashboard/movimientos' },
-    { id: 'reportes', label: 'REPORTES', icon: MdAssessment, path: '/dashboard/reportes' },
+    { id: 'dashboard', label: 'DASHBOARD', icon: MdDashboard, path: '/' },
+    { id: 'categorias', label: 'CATEGORÍAS', icon: MdCategory, path: '/categorias' },
+    { id: 'productos', label: 'PRODUCTOS', icon: MdInventory, path: '/productos' },
+    { id: 'almacenes', label: 'ALMACENES', icon: MdWarehouse, path: '/almacenes' },
+    // { id: 'movimientos', label: 'MOVIMIENTOS', icon: MdSwapHoriz, path: '/movimientos' },
+    { id: 'reportes', label: 'REPORTES', icon: MdAssessment, path: '/reportes' },
     {
       id: 'configuracion',
       label: 'CONFIGURACIÓN',
       icon: MdSettings,
-      path: '/dashboard/configuracion',
+      path: '/configuracion',
     },
   ];
 
@@ -44,7 +44,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <aside className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
         <div className="sidebar__header">
           <div className="sidebar__logo">
-            <img className="sidebar__logo-image" src="/logo.png" alt="logo" />
+            {/*
+              <img className="sidebar__logo-image" src="/logo.png" alt="logo" />
+              */}
           </div>
           <button className="sidebar__close-btn" onClick={onClose}>
             <MdClose />

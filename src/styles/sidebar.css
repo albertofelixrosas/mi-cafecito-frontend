@@ -136,7 +136,7 @@
 */
 
 /* Mobile - Sidebar overlay */
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;

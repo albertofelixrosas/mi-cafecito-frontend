@@ -1,3 +1,5 @@
+import type { ProductCategory } from './productCategory.model';
+
 export interface Product {
   productId: number;
   productCategoryId: number;
@@ -6,7 +8,8 @@ export interface Product {
   description: string;
   isElaborated: boolean;
   isPortioned: boolean;
-  photoUrl?: string;
+  photoUrl: string;
+  category: ProductCategory;
 }
 
 export interface CreateProductRequest {

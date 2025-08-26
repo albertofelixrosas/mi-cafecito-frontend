@@ -3,20 +3,23 @@
 import type React from 'react';
 import { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
-import { useProducts } from '../hooks/useProducts';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useProductCategories } from '../hooks/useProductCategories';
 import type { Product, CreateProductRequest } from '../models/product.model';
 import '../styles/product-form.css';
+import { useProductById } from '../hooks/products/useProductById';
+import { useCreateProduct } from '../hooks/products/useCreateProduct';
+import { useUpdateProduct } from '../hooks/products/useUpdateProduct';
 
-interface ProductFormProps {
-  product?: Product | null;
-  onClose: () => void;
-}
-
-const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
-  const { createProduct, updateProduct } = useProducts();
+const ProductFormModal: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams(); // si hay id → edición
+  const { createProduct } = useCreateProduct();
+  const { updateProduct } = useUpdateProduct();
+  const { data: productData } = useProductById(id ? Number(id) : 0);
   const { categories } = useProductCategories();
   const [loading, setLoading] = useState<boolean>(false);
+  const [product, setProduct] = useState<Product | null>(null);
 
   const [formData, setFormData] = useState<CreateProductRequest>({
     productCategoryId: 0,
@@ -28,31 +31,37 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
     photoUrl: '',
   });
 
+  const isEdit = Boolean(id);
+
+  // 🔹 Si estamos en edición, cargar el producto
   useEffect(() => {
-    if (product) {
-      setFormData({
-        productCategoryId: product.productCategoryId,
-        productName: product.productName,
-        unitOfMeasurement: product.unitOfMeasurement,
-        description: product.description,
-        isElaborated: product.isElaborated,
-        isPortioned: product.isPortioned,
-        photoUrl: product.photoUrl || '',
-      });
+    if (isEdit && id) {
+      if (productData) {
+        setProduct(productData);
+        setFormData({
+          productCategoryId: productData.productCategoryId,
+          productName: productData.productName,
+          unitOfMeasurement: productData.unitOfMeasurement,
+          description: productData.description,
+          isElaborated: productData.isElaborated,
+          isPortioned: productData.isPortioned,
+          photoUrl: productData.photoUrl || '',
+        });
+      }
     }
-  }, [product]);
+  }, [isEdit, id, productData]);
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      if (product) {
+      if (isEdit && product) {
         await updateProduct({ ...formData, productId: product.productId });
       } else {
         await createProduct(formData);
       }
-      onClose();
+      navigate('..'); // volver a /productos
     } catch (error) {
       console.error('Error saving product:', error);
     } finally {
@@ -79,8 +88,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
     <div className="product-form__overlay">
       <div className="product-form__form">
         <header className="form__header">
-          <h2 className="form__title">{product ? 'Edit Product' : 'Add New Product'}</h2>
-          <button className="form__close-btn" onClick={onClose}>
+          <h2 className="form__title">{isEdit ? `Edit Product ${id}` : 'Add New Product'}</h2>
+          <button className="form__close-btn" onClick={() => navigate('..')}>
             <MdClose />
           </button>
         </header>
@@ -199,11 +208,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
           </div>
 
           <div className="form__actions">
-            <button type="button" className="btn btn--cancel" onClick={onClose}>
+            <button type="button" className="btn btn--cancel" onClick={() => navigate('..')}>
               Cancel
             </button>
             <button type="submit" className="btn btn--submit" disabled={loading}>
-              {loading ? 'Saving...' : product ? 'Update' : 'Create'}
+              {loading ? 'Saving...' : isEdit ? 'Update' : 'Create'}
             </button>
           </div>
         </form>
@@ -212,4 +221,4 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
   );
 };
 
-export default ProductForm;
+export default ProductFormModal;

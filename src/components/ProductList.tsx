@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useState } from 'react';
 import { MdAdd, MdEdit, MdDelete, MdSearch } from 'react-icons/md';
-import { useProducts } from '../hooks/useProducts';
+import { useProducts } from '../hooks/products/useProducts';
 import { useProductCategories } from '../hooks/useProductCategories';
 import ProductForm from './ProductForm';
 import type { Product } from '../models/product.model';

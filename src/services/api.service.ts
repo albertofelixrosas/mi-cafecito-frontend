@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 class ApiService {
   private api: AxiosInstance;
@@ -37,8 +37,8 @@ class ApiService {
     );
   }
 
-  async get<T>(url: string): Promise<T> {
-    const response: AxiosResponse<T> = await this.api.get(url);
+  async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+    const response: AxiosResponse<T> = await this.api.get(url, config);
     return response.data;
   }
 

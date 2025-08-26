@@ -1,16 +1,82 @@
 import React from 'react';
 import { MdAdd, MdDelete, MdEdit, MdSearch } from 'react-icons/md';
+import { useNavigate, Outlet, Link, useSearchParams } from 'react-router-dom';
 import '../../styles/product-list.css';
-// import { useProducts } from '../../hooks/useProducts';
+import { useProducts } from '../../hooks/products/useProducts';
+import { useDeleteProduct } from '../../hooks/products/useDeleteProduct';
+
+type ProductFiltersKeys = 'name' | 'categoryId' | 'page' | 'limit';
 
 const Products: React.FC = () => {
-  // const { products, loading, error, deleteProduct } = useProducts();
+  const navigate = useNavigate();
+  const {
+    deleteProduct,
+    // isPending: isLoadingDeleteProduct,
+    // error: errorAtDelete,
+  } = useDeleteProduct();
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const filters = {
+    name: searchParams.get('name') || undefined,
+    categoryId: searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined,
+    page: Number(searchParams.get('page')) || 1,
+    limit: Number(searchParams.get('limit')) || 10,
+  };
+
+  const { products, /* isLoading: isLoadingProducts, */ error: errorAtGet } = useProducts(filters);
+
+  // 🔄 actualizar la URL (y por lo tanto los filtros)
+  const handleFilterChange = (key: ProductFiltersKeys, value: string | number | undefined) => {
+    const newParams = new URLSearchParams(searchParams);
+
+    if (value === undefined || value === '') {
+      newParams.delete(key);
+    } else {
+      newParams.set(key, String(value));
+    }
+
+    // resetear a la página 1 si cambian filtros
+    if (key !== 'page') {
+      newParams.set('page', '1');
+    }
+
+    setSearchParams(newParams);
+  };
+
+  // 📌 Loader modal
+  /*
+  if (isLoadingProducts) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <p className="product-list__title">Cargando productos...</p>
+        </div>
+      </div>
+    );
+  }
+  */
+
+  // 📌 Error modal
+  if (errorAtGet) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Ocurrió un error</h2>
+          <p>{errorAtGet.message}</p>
+          <button onClick={() => window.location.reload()} className="btn btn--submit">
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="product-list">
       <header className="product-list__header">
         <h1 className="product-list__title">PRODUCTOS</h1>
-        <button className="btn btn--submit" onClick={() => {} /*() => /setShowForm(true)*/}>
+        <button className="btn btn--submit" onClick={() => navigate('nuevo')}>
           <MdAdd className="product-list__add-icon" />
           Add Product
         </button>
@@ -23,8 +89,8 @@ const Products: React.FC = () => {
             type="text"
             className="form__search-input"
             placeholder="Search products..."
-            // value={searchTerm}
-            // onChange={e => setSearchTerm(e.target.value)}
+            value={filters.name || ''}
+            onChange={e => handleFilterChange('name', e.target.value)}
           />
         </div>
         <div>
@@ -51,63 +117,54 @@ const Products: React.FC = () => {
             </tr>
           </thead>
           <tbody className="table__body">
-            {
-              /*filteredProducts*/ [
-                {
-                  productId: 1,
-                  productName: 'Sample Product',
-                  productCategoryId: 1,
-                  unitOfMeasurement: 'kg',
-                  description: 'This is a sample product.',
-                  isElaborated: true,
-                  isPortioned: false,
-                },
-              ].map(product => (
-                <tr key={product.productId} className="table__row">
-                  <td className="table__cell table__cell--name">{product.productName}</td>
-                  <td className="table__cell">
-                    {/* getCategoryName(product.productCategoryId) */}
-                  </td>
-                  <td className="table__cell">{product.unitOfMeasurement}</td>
-                  <td className="table__cell table__cell--description">{product.description}</td>
-                  <td className="table__cell">
-                    <span
-                      className={`table__badge ${product.isElaborated ? 'table__badge--yes' : 'table__badge--no'}`}
+            {products.map(product => (
+              <tr key={product.productId} className="table__row">
+                <td className="table__cell table__cell--name">{product.productName}</td>
+                <td className="table__cell">{product.category.productCategoryName}</td>
+                <td className="table__cell">{product.unitOfMeasurement}</td>
+                <td className="table__cell table__cell--description">{product.description}</td>
+                <td className="table__cell">
+                  <span
+                    className={`table__badge ${
+                      product.isElaborated ? 'table__badge--yes' : 'table__badge--no'
+                    }`}
+                  >
+                    {product.isElaborated ? 'Si' : 'No'}
+                  </span>
+                </td>
+                <td className="table__cell">
+                  <span
+                    className={`table__badge ${
+                      product.isPortioned ? 'table__badge--yes' : 'table__badge--no'
+                    }`}
+                  >
+                    {product.isPortioned ? 'Si' : 'No'}
+                  </span>
+                </td>
+                <td className="table__cell">
+                  <div className="table__actions">
+                    <Link
+                      to={`${product.productId}/editar`}
+                      className="table__action-btn table__action-btn--edit"
                     >
-                      {product.isElaborated ? 'Si' : 'No'}
-                    </span>
-                  </td>
-                  <td className="table__cell">
-                    <span
-                      className={`table__badge ${product.isPortioned ? 'table__badge--yes' : 'table__badge--no'}`}
+                      <MdEdit />
+                    </Link>
+                    <button
+                      className="table__action-btn table__action-btn--delete"
+                      onClick={() => deleteProduct(product.productId)}
                     >
-                      {product.isPortioned ? 'Si' : 'No'}
-                    </span>
-                  </td>
-                  <td className="table__cell">
-                    <div className="table__actions">
-                      <button
-                        className="table__action-btn table__action-btn--edit"
-                        // onClick={() => handleEdit(product)}
-                      >
-                        <MdEdit />
-                      </button>
-                      <button
-                        className="table__action-btn table__action-btn--delete"
-                        //onClick={() => handleDelete(product.productId)}
-                      >
-                        <MdDelete />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            }
+                      <MdDelete />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
-      {/*showForm && <ProductForm product={editingProduct} onClose={handleCloseForm} />*/}
+      {/* 👇 Aquí se montará el modal cuando la ruta sea /productos/nuevo o /productos/:id/editar */}
+      <Outlet />
     </div>
   );
 };

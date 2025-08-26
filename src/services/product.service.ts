@@ -9,8 +9,8 @@ import type {
 export class ProductService {
   private readonly baseUrl = '/products';
 
-  async getAllProducts(filters: FilterProductsDto): Promise<Product[]> {
-    return apiService.get<Product[]>(this.baseUrl, { params: filters });
+  async getAllProducts(filters?: FilterProductsDto): Promise<Product[]> {
+    return apiService.get<Product[]>(this.baseUrl, { params: filters ?? {} });
   }
 
   async getProductById(id: number): Promise<Product> {

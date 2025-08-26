@@ -7,6 +7,7 @@ import DashboardLayout from './components/DashboardLayout';
 import DashboardHome from './components/DashboardHome';
 import Categorias from './pages/Categories/Categories';
 import Productos from './pages/Products/Products';
+import ProductoFormModal from './components/ProductForm';
 import Almacenes from './pages/Warehouses/Warehouses';
 import Entradas from './pages/StockEntries/StockEntries';
 import Reportes from './pages/Reports/Reports';
@@ -31,7 +32,10 @@ function App() {
         >
           <Route index element={<DashboardHome />} />
           <Route path="categorias" element={<Categorias />} />
-          <Route path="productos" element={<Productos />} />
+          <Route path="productos" element={<Productos />}>
+            <Route path="nuevo" element={<ProductoFormModal />} />
+            <Route path=":id/editar" element={<ProductoFormModal />} />
+          </Route>
           <Route path="almacenes" element={<Almacenes />} />
           <Route path="entradas" element={<Entradas />} />
           <Route path="reportes" element={<Reportes />} />

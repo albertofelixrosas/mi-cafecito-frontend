@@ -8,30 +8,25 @@ import type {
 } from '../models/product.model';
 
 export class ProductService {
-  private readonly baseUrl = '/products';
-
   async getProducts(filters?: FilterProductsDto): Promise<ProductResponse> {
-    return apiService.get<ProductResponse>(this.baseUrl, { params: filters ?? {} });
+    return apiService.get<ProductResponse>('/products', { params: filters ?? {} });
   }
 
   async getProductById(id: number): Promise<Product> {
-    return apiService.get<Product>(`${this.baseUrl}/${id}`);
+    return apiService.get<Product>(`${'/products'}/${id}`);
   }
 
   async createProduct(product: CreateProductRequest): Promise<Product> {
-    return apiService.post<Product>(this.baseUrl, product);
+    console.log({ url: '/products' });
+    return apiService.post<Product>('/products', product);
   }
 
   async updateProduct(product: UpdateProductRequest): Promise<Product> {
-    return apiService.put<Product>(`${this.baseUrl}/${product.productId}`, product);
+    return apiService.put<Product>(`${'/products'}/${product.productId}`, product);
   }
 
   async deleteProduct(id: number): Promise<void> {
-    return apiService.delete<void>(`${this.baseUrl}/${id}`);
-  }
-
-  async getProductsByCategory(categoryId: number): Promise<Product[]> {
-    return apiService.get<Product[]>(`${this.baseUrl}/category/${categoryId}`);
+    return apiService.delete<void>(`${'/products'}/${id}`);
   }
 }
 

@@ -25,7 +25,7 @@ const Products: React.FC = () => {
     name: searchParams.get('name') || undefined,
     categoryId: searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined,
     page: Number(searchParams.get('page')) || 1,
-    limit: Number(searchParams.get('limit')) || 1,
+    limit: Number(searchParams.get('limit')) || 20,
   };
 
   const {

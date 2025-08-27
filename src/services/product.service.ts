@@ -4,13 +4,14 @@ import type {
   CreateProductRequest,
   UpdateProductRequest,
   FilterProductsDto,
+  ProductResponse,
 } from '../models/product.model';
 
 export class ProductService {
   private readonly baseUrl = '/products';
 
-  async getAllProducts(filters?: FilterProductsDto): Promise<Product[]> {
-    return apiService.get<Product[]>(this.baseUrl, { params: filters ?? {} });
+  async getProducts(filters?: FilterProductsDto): Promise<ProductResponse> {
+    return apiService.get<ProductResponse>(this.baseUrl, { params: filters ?? {} });
   }
 
   async getProductById(id: number): Promise<Product> {

@@ -1,15 +1,14 @@
 import { useSearchParams } from 'react-router-dom';
 
-export function usePaginationParams(param: string = 'page') {
+export const usePaginationParams = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get(param) || 1);
 
-  const setPage = (page: number) => {
-    // Clonamos los params para no perder otros filtros
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set(param, String(page));
-    setSearchParams(newParams);
+  const page = Number(searchParams.get('page') || 1);
+
+  const setPage = (newPage: number) => {
+    searchParams.set('page', String(newPage));
+    setSearchParams(searchParams);
   };
 
-  return { page: currentPage, setPage };
-}
+  return { page, setPage };
+};

@@ -35,19 +35,25 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="pagination">
-      <button disabled={page === 1} onClick={handlePrev} className="pagination-btn">
+      <button disabled={page === 1} onClick={handlePrev} className={`pagination__button`}>
         Anterior
       </button>
 
       {startPage > 1 && (
         <>
-          <button onClick={() => onPageChange(1)}>1</button>
+          <button className={`pagination__button`} onClick={() => onPageChange(1)}>
+            1
+          </button>
           {startPage > 2 && <span>…</span>}
         </>
       )}
 
       {pages.map(p => (
-        <button key={p} onClick={() => onPageChange(p)} className={p === page ? 'active' : ''}>
+        <button
+          key={p}
+          onClick={() => onPageChange(p)}
+          className={`pagination__button ${p === page ? 'active' : ''}`}
+        >
           {p}
         </button>
       ))}
@@ -59,7 +65,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         </>
       )}
 
-      <button disabled={page === lastPage} onClick={handleNext} className="pagination-btn">
+      <button disabled={page === lastPage} onClick={handleNext} className="pagination__button">
         Siguiente
       </button>
 

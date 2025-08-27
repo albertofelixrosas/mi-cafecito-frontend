@@ -4,6 +4,8 @@ import { useNavigate, Outlet, Link, useSearchParams } from 'react-router-dom';
 import '../../styles/product-list.css';
 import { useProducts } from '../../hooks/products/useProducts';
 import { useDeleteProduct } from '../../hooks/products/useDeleteProduct';
+import { usePaginationParams } from '../../hooks/usePaginationParams';
+import Pagination from '../../components/Pagination';
 
 type ProductFiltersKeys = 'name' | 'categoryId' | 'page' | 'limit';
 
@@ -17,14 +19,20 @@ const Products: React.FC = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const { page, setPage } = usePaginationParams(); // para que el hook gestione el parámetro 'page' en la URL
+
   const filters = {
     name: searchParams.get('name') || undefined,
     categoryId: searchParams.get('categoryId') ? Number(searchParams.get('categoryId')) : undefined,
     page: Number(searchParams.get('page')) || 1,
-    limit: Number(searchParams.get('limit')) || 10,
+    limit: Number(searchParams.get('limit')) || 1,
   };
 
-  const { products, /* isLoading: isLoadingProducts, */ error: errorAtGet } = useProducts(filters);
+  const {
+    products,
+    /* isLoading: isLoadingProducts, */ error: errorAtGet,
+    pagination,
+  } = useProducts(filters);
 
   // 🔄 actualizar la URL (y por lo tanto los filtros)
   const handleFilterChange = (key: ProductFiltersKeys, value: string | number | undefined) => {
@@ -162,6 +170,13 @@ const Products: React.FC = () => {
           </tbody>
         </table>
       </div>
+      <Pagination
+        page={page}
+        lastPage={Math.ceil(pagination.total / pagination.limit)}
+        onPageChange={setPage}
+        total={pagination.total} // Aquí deberías pasar el total de productos basado en la respuesta del servidor
+        pageRange={2}
+      />
 
       {/* 👇 Aquí se montará el modal cuando la ruta sea /productos/nuevo o /productos/:id/editar */}
       <Outlet />

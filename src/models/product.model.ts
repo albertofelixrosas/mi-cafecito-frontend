@@ -32,3 +32,11 @@ export interface FilterProductsDto {
   page: number;
   limit: number;
 }
+
+export interface ProductResponse {
+  data: Product[];
+  total: number;
+  page: number;
+  limit: number;
+  lastPage: number;
+}

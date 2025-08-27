@@ -89,7 +89,7 @@ const Products: React.FC = () => {
         <h1 className="product-list__title">PRODUCTOS</h1>
         <button className="btn btn--submit" onClick={() => navigate('nuevo')}>
           <MdAdd className="product-list__add-icon" />
-          Add Product
+          Agregar nuevo
         </button>
       </header>
 
@@ -99,7 +99,7 @@ const Products: React.FC = () => {
           <input
             type="text"
             className="form__search-input"
-            placeholder="Search products..."
+            placeholder="Buscar productos..."
             value={filters.name || ''}
             onChange={e => handleFilterChange('name', e.target.value)}
           />

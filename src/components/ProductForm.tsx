@@ -97,7 +97,9 @@ const ProductFormModal: React.FC = () => {
     <div className="product-form__overlay">
       <div className="product-form__form">
         <header className="form__header">
-          <h2 className="form__title">{isEdit ? `Edit Product ${id}` : 'Add New Product'}</h2>
+          <h2 className="form__title">
+            {isEdit ? `Modificar producto` : 'Agregar nuevo producto'}
+          </h2>
           <button className="form__close-btn" onClick={() => navigate('..')}>
             <MdClose />
           </button>
@@ -106,7 +108,7 @@ const ProductFormModal: React.FC = () => {
         <form className="form__form" onSubmit={handleSubmit}>
           <div className="form__field">
             <label className="form__label" htmlFor="productName">
-              Product Name *
+              Nombre *
             </label>
             <input
               type="text"
@@ -121,7 +123,7 @@ const ProductFormModal: React.FC = () => {
 
           <div className="form__field">
             <label className="form__label" htmlFor="productCategoryId">
-              Category *
+              Categoria *
             </label>
             <select
               id="productCategoryId"
@@ -132,7 +134,7 @@ const ProductFormModal: React.FC = () => {
               required
             >
               <option value={0} disabled>
-                Select a category
+                Selecciona una categoría
               </option>
               {categories.map(category => (
                 <option key={category.productCategoryId} value={category.productCategoryId}>
@@ -144,7 +146,7 @@ const ProductFormModal: React.FC = () => {
 
           <div className="form__field">
             <label className="form__label" htmlFor="unitOfMeasurement">
-              Unit of Measurement *
+              Unidad de medida *
             </label>
             <input
               type="text"
@@ -160,7 +162,7 @@ const ProductFormModal: React.FC = () => {
 
           <div className="form__field">
             <label className="form__label" htmlFor="description">
-              Description *
+              Descripción *
             </label>
             <textarea
               id="description"
@@ -175,7 +177,7 @@ const ProductFormModal: React.FC = () => {
 
           <div className="form__field">
             <label className="form__label" htmlFor="photoUrl">
-              Photo URL
+              URL de la imagen (opcional)
             </label>
             <input
               type="url"
@@ -199,7 +201,7 @@ const ProductFormModal: React.FC = () => {
                 onChange={handleChange}
               />
               <label className="form__checkbox-label" htmlFor="isElaborated">
-                Is Elaborated
+                Es Elaborado
               </label>
             </div>
 
@@ -213,21 +215,21 @@ const ProductFormModal: React.FC = () => {
                 onChange={handleChange}
               />
               <label className="form__checkbox-label" htmlFor="isPortioned">
-                Is Portioned
+                Es porcionado
               </label>
             </div>
           </div>
 
           <div className="form__actions">
             <button type="button" className="btn btn--cancel" onClick={() => navigate('..')}>
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
               className="btn btn--submit"
               disabled={loading || !isValidProduct(formData)}
             >
-              {loading ? 'Saving...' : isEdit ? 'Update' : 'Create'}
+              {loading ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
             </button>
           </div>
         </form>

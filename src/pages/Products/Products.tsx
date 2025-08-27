@@ -141,13 +141,13 @@ const Products: React.FC = () => {
         <table className="table">
           <thead className="table__head">
             <tr>
-              <th className="table__header">Name</th>
-              <th className="table__header">Category</th>
-              <th className="table__header">Unit</th>
-              <th className="table__header">Description</th>
-              <th className="table__header">Elaborated</th>
-              <th className="table__header">Portioned</th>
-              <th className="table__header">Actions</th>
+              <th className="table__header">Nombre</th>
+              <th className="table__header">Categoria</th>
+              <th className="table__header">Unidad</th>
+              <th className="table__header">Descripción</th>
+              <th className="table__header">Elaborado</th>
+              <th className="table__header">Porcionado</th>
+              <th className="table__header">Acciones</th>
             </tr>
           </thead>
           <tbody className="table__body">

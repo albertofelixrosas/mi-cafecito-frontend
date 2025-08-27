@@ -12,6 +12,7 @@ import Almacenes from './pages/Warehouses/Warehouses';
 import Entradas from './pages/StockEntries/StockEntries';
 import Reportes from './pages/Reports/Reports';
 import Configuracion from './pages/Configuration/Configuration';
+import ProductCategoryFormModal from './components/ProductCategoryForm';
 
 function App() {
   return (
@@ -31,7 +32,10 @@ function App() {
           }
         >
           <Route index element={<DashboardHome />} />
-          <Route path="categorias" element={<Categorias />} />
+          <Route path="categorias" element={<Categorias />}>
+            <Route path="nuevo" element={<ProductCategoryFormModal />} />
+            <Route path=":id/editar" element={<ProductCategoryFormModal />} />
+          </Route>
           <Route path="productos" element={<Productos />}>
             <Route path="nuevo" element={<ProductoFormModal />} />
             <Route path=":id/editar" element={<ProductoFormModal />} />

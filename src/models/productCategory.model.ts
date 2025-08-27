@@ -14,3 +14,7 @@ export interface CreateProductCategoryRequest {
 export interface UpdateProductCategoryRequest extends Partial<CreateProductCategoryRequest> {
   productCategoryId: number;
 }
+
+export interface FilterProductCategoriesDto {
+  name?: string;
+}

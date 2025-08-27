@@ -6,6 +6,7 @@ import { useProducts } from '../../hooks/products/useProducts';
 import { useDeleteProduct } from '../../hooks/products/useDeleteProduct';
 import { usePaginationParams } from '../../hooks/usePaginationParams';
 import Pagination from '../../components/Pagination';
+import { useProductCategories } from '../../hooks/useProductCategories';
 
 type ProductFiltersKeys = 'name' | 'categoryId' | 'page' | 'limit';
 
@@ -27,6 +28,8 @@ const Products: React.FC = () => {
     page: Number(searchParams.get('page')) || 1,
     limit: Number(searchParams.get('limit')) || 20,
   };
+
+  const { categories } = useProductCategories();
 
   const {
     products,
@@ -105,8 +108,31 @@ const Products: React.FC = () => {
           <label className="form__label" htmlFor="">
             Buscar por categoría de producto
           </label>
-          <select className="form__select">
+          <select
+            className="form__select"
+            name="categoryId"
+            id="categoryId"
+            value={filters.categoryId || ''}
+            onChange={e => handleFilterChange('categoryId', e.target.value)}
+          >
             <option value="">{'(Sin especificar)'}</option>
+            {categories.map(category => (
+              <option
+                key={category.productCategoryId}
+                value={category.productCategoryId}
+                selected={filters.categoryId === category.productCategoryId}
+                onClick={() =>
+                  handleFilterChange(
+                    'categoryId',
+                    filters.categoryId === category.productCategoryId
+                      ? undefined
+                      : category.productCategoryId,
+                  )
+                }
+              >
+                {category.productCategoryName}
+              </option>
+            ))}
           </select>
         </div>
       </div>

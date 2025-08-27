@@ -3,32 +3,31 @@ import type {
   ProductCategory,
   CreateProductCategoryRequest,
   UpdateProductCategoryRequest,
+  FilterProductCategoriesDto,
 } from '../models/productCategory.model';
 
 export class ProductCategoryService {
-  private readonly baseUrl = '/product-categories';
-
-  async getAllCategories(): Promise<ProductCategory[]> {
-    return apiService.get<ProductCategory[]>(this.baseUrl);
+  async getAllCategories(filters?: FilterProductCategoriesDto): Promise<ProductCategory[]> {
+    return apiService.get<ProductCategory[]>('/product-categories', { params: filters ?? {} });
   }
 
   async getCategoryById(id: number): Promise<ProductCategory> {
-    return apiService.get<ProductCategory>(`${this.baseUrl}/${id}`);
+    return apiService.get<ProductCategory>(`${'/product-categories'}/${id}`);
   }
 
   async createCategory(category: CreateProductCategoryRequest): Promise<ProductCategory> {
-    return apiService.post<ProductCategory>(this.baseUrl, category);
+    return apiService.post<ProductCategory>('/product-categories', category);
   }
 
   async updateCategory(category: UpdateProductCategoryRequest): Promise<ProductCategory> {
     return apiService.put<ProductCategory>(
-      `${this.baseUrl}/${category.productCategoryId}`,
+      `${'/product-categories'}/${category.productCategoryId}`,
       category,
     );
   }
 
   async deleteCategory(id: number): Promise<void> {
-    return apiService.delete<void>(`${this.baseUrl}/${id}`);
+    return apiService.delete<void>(`${'/product-categories'}/${id}`);
   }
 }
 

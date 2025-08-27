@@ -51,6 +51,15 @@ const ProductFormModal: React.FC = () => {
     }
   }, [isEdit, id, productData]);
 
+  const isValidProduct = (product: CreateProductRequest): boolean => {
+    return (
+      product.productName.trim() !== '' &&
+      product.productCategoryId > 0 &&
+      product.unitOfMeasurement.trim() !== '' &&
+      product.description.trim() !== ''
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setLoading(true);
@@ -122,7 +131,9 @@ const ProductFormModal: React.FC = () => {
               onChange={handleChange}
               required
             >
-              <option value={0}>Select a category</option>
+              <option value={0} disabled>
+                Select a category
+              </option>
               {categories.map(category => (
                 <option key={category.productCategoryId} value={category.productCategoryId}>
                   {category.productCategoryName}
@@ -211,7 +222,11 @@ const ProductFormModal: React.FC = () => {
             <button type="button" className="btn btn--cancel" onClick={() => navigate('..')}>
               Cancel
             </button>
-            <button type="submit" className="btn btn--submit" disabled={loading}>
+            <button
+              type="submit"
+              className="btn btn--submit"
+              disabled={loading || !isValidProduct(formData)}
+            >
               {loading ? 'Saving...' : isEdit ? 'Update' : 'Create'}
             </button>
           </div>

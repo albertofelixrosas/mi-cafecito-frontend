@@ -4,12 +4,12 @@ import type React from 'react';
 import { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useProductCategories } from '../hooks/useProductCategories';
-import type { Product, CreateProductRequest } from '../models/product.model';
-import '../styles/product-form.css';
-import { useProductById } from '../hooks/products/useProductById';
-import { useCreateProduct } from '../hooks/products/useCreateProduct';
-import { useUpdateProduct } from '../hooks/products/useUpdateProduct';
+import { useProductCategories } from '../../hooks/product-categories/useProductCategories';
+import type { Product, CreateProductRequest } from '../../models/product.model';
+import '../../styles/product-form.css';
+import { useProductById } from '../../hooks/products/useProductById';
+import { useCreateProduct } from '../../hooks/products/useCreateProduct';
+import { useUpdateProduct } from '../../hooks/products/useUpdateProduct';
 
 const ProductFormModal: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const ProductFormModal: React.FC = () => {
   const { createProduct } = useCreateProduct();
   const { updateProduct } = useUpdateProduct();
   const { data: productData } = useProductById(id ? Number(id) : 0);
-  const { categories } = useProductCategories();
+  const { productCategories } = useProductCategories();
   const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
 
@@ -136,7 +136,7 @@ const ProductFormModal: React.FC = () => {
               <option value={0} disabled>
                 Selecciona una categoría
               </option>
-              {categories.map(category => (
+              {productCategories.map(category => (
                 <option key={category.productCategoryId} value={category.productCategoryId}>
                   {category.productCategoryName}
                 </option>

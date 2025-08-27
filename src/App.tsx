@@ -7,12 +7,12 @@ import DashboardLayout from './components/DashboardLayout';
 import DashboardHome from './components/DashboardHome';
 import Categorias from './pages/Categories/Categories';
 import Productos from './pages/Products/Products';
-import ProductoFormModal from './components/ProductForm';
+import ProductoFormModal from './pages/Products/ProductForm';
 import Almacenes from './pages/Warehouses/Warehouses';
 import Entradas from './pages/StockEntries/StockEntries';
 import Reportes from './pages/Reports/Reports';
 import Configuracion from './pages/Configuration/Configuration';
-import ProductCategoryFormModal from './components/ProductCategoryForm';
+import ProductCategoryFormModal from './pages/Categories/ProductCategoryForm';
 
 function App() {
   return (
@@ -40,7 +40,10 @@ function App() {
             <Route path="nuevo" element={<ProductoFormModal />} />
             <Route path=":id/editar" element={<ProductoFormModal />} />
           </Route>
-          <Route path="almacenes" element={<Almacenes />} />
+          <Route path="almacenes" element={<Almacenes />}>
+            <Route path="nuevo" element={<div>Agregar Almacén (Modal)</div>} />
+            <Route path=":id/editar" element={<div>Editar Almacén (Modal)</div>} />
+          </Route>
           <Route path="entradas" element={<Entradas />} />
           <Route path="reportes" element={<Reportes />} />
           <Route path="configuracion" element={<Configuracion />} />

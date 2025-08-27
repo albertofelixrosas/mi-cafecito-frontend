@@ -4,12 +4,12 @@ import type React from 'react';
 import { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { CreateProductCategoryRequest } from '../models/productCategory.model';
-import '../styles/product-form.css';
-import { useProductCategoryById } from '../hooks/product-categories/useProductCategoryById';
-import { useCreateProductCategory } from '../hooks/product-categories/useCreateProductCategory';
-import { useUpdateProductCategory } from '../hooks/product-categories/useUpdateProductCategories';
-import type { ProductCategory } from '../models/productCategory.model';
+import type { CreateProductCategoryRequest } from '../../models/productCategory.model';
+import '../../styles/product-form.css';
+import { useProductCategoryById } from '../../hooks/product-categories/useProductCategoryById';
+import { useCreateProductCategory } from '../../hooks/product-categories/useCreateProductCategory';
+import { useUpdateProductCategory } from '../../hooks/product-categories/useUpdateProductCategories';
+import type { ProductCategory } from '../../models/productCategory.model';
 
 const ProductCategoryFormModal: React.FC = () => {
   const navigate = useNavigate();

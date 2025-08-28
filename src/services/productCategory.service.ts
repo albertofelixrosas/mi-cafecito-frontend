@@ -20,10 +20,8 @@ export class ProductCategoryService {
   }
 
   async updateCategory(category: UpdateProductCategoryRequest): Promise<ProductCategory> {
-    return apiService.put<ProductCategory>(
-      `${'/product-categories'}/${category.productCategoryId}`,
-      category,
-    );
+    const { productCategoryId, ...data } = category;
+    return apiService.patch<ProductCategory>(`${'/product-categories'}/${productCategoryId}`, data);
   }
 
   async deleteCategory(id: number): Promise<void> {

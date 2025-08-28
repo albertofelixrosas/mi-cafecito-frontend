@@ -22,7 +22,8 @@ export class ProductService {
   }
 
   async updateProduct(product: UpdateProductRequest): Promise<Product> {
-    return apiService.put<Product>(`${'/products'}/${product.productId}`, product);
+    const { productId, ...rest } = product;
+    return apiService.patch<Product>(`${'/products'}/${productId}`, rest);
   }
 
   async deleteProduct(id: number): Promise<void> {

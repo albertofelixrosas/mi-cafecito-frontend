@@ -120,7 +120,6 @@ const Products: React.FC = () => {
               <option
                 key={category.productCategoryId}
                 value={category.productCategoryId}
-                selected={filters.categoryId === category.productCategoryId}
                 onClick={() =>
                   handleFilterChange(
                     'categoryId',

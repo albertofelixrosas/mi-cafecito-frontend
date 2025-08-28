@@ -45,7 +45,10 @@ function App() {
             <Route path="nuevo" element={<WarehouseFormModal />} />
             <Route path=":id/editar" element={<WarehouseFormModal />} />
           </Route>
-          <Route path="entradas" element={<Entradas />} />
+          <Route path="entradas" element={<Entradas />}>
+            <Route path="nuevo" element={<div>Formulario de nueva entrada</div>} />
+            <Route path=":id/editar" element={<div>Formulario de editar entrada</div>} />
+          </Route>
           <Route path="reportes" element={<Reportes />} />
           <Route path="configuracion" element={<Configuracion />} />
         </Route>

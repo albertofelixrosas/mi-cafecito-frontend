@@ -9,6 +9,8 @@ import {
   MdAssessment,
   MdSettings,
   MdClose,
+  MdArrowCircleDown,
+  MdArrowCircleUp,
 } from 'react-icons/md';
 import '../styles/sidebar.css';
 
@@ -25,6 +27,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { id: 'categorias', label: 'CATEGORÍAS', icon: MdCategory, path: '/categorias' },
     { id: 'productos', label: 'PRODUCTOS', icon: MdInventory, path: '/productos' },
     { id: 'almacenes', label: 'ALMACENES', icon: MdWarehouse, path: '/almacenes' },
+    { id: 'entradas', label: 'ENTRADAS', icon: MdArrowCircleDown, path: '/entradas' },
+    { id: 'salidas', label: 'SALIDAS', icon: MdArrowCircleUp, path: '/salidas' },
     // { id: 'movimientos', label: 'MOVIMIENTOS', icon: MdSwapHoriz, path: '/movimientos' },
     { id: 'reportes', label: 'REPORTES', icon: MdAssessment, path: '/reportes' },
     {

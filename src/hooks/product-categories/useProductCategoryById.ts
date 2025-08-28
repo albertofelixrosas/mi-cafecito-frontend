@@ -1,4 +1,3 @@
-// hooks/useProductById.ts
 import { useQuery } from '@tanstack/react-query';
 import { productCategoryService } from '../../services/productCategory.service';
 import type { ProductCategory } from '../../models/productCategory.model';

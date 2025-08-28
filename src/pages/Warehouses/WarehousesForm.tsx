@@ -4,25 +4,24 @@ import type React from 'react';
 import { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { CreateProductCategoryRequest } from '../../models/productCategory.model';
 import '../../styles/product-form.css';
-import { useProductCategoryById } from '../../hooks/product-categories/useProductCategoryById';
-import { useCreateProductCategory } from '../../hooks/product-categories/useCreateProductCategory';
-import { useUpdateProductCategory } from '../../hooks/product-categories/useUpdateProductCategory';
-import type { ProductCategory } from '../../models/productCategory.model';
+import { useCreateWarehouse } from '../../hooks/warehouses/useCreateWarehouse';
+import { useUpdateWarehouse } from '../../hooks/warehouses/useUpdateWarehouse';
+import { useWarehouseById } from '../../hooks/warehouses/useWarehouseById';
+import type { CreateWarehouseRequest, Warehouse } from '../../models/warehouse.model';
 
-const ProductCategoryFormModal: React.FC = () => {
+const WarehouseFormModal: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // si hay id → edición
-  const { createProductCategory } = useCreateProductCategory();
-  const { updateProductCategory } = useUpdateProductCategory();
-  const { data: productCategoryData } = useProductCategoryById(id ? Number(id) : 0);
+  const { createWarehouse } = useCreateWarehouse();
+  const { updateWarehouse } = useUpdateWarehouse();
+  const { data: warehouseData } = useWarehouseById(id ? Number(id) : 0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [productCategory, setProductCategory] = useState<ProductCategory | null>(null);
+  const [warehouse, setWarehouse] = useState<Warehouse | null>(null);
 
-  const [formData, setFormData] = useState<CreateProductCategoryRequest>({
-    productCategoryName: '',
-    description: '',
+  const [formData, setFormData] = useState<CreateWarehouseRequest>({
+    warehouseName: '',
+    location: '',
     photoUrl: '',
   });
 
@@ -31,29 +30,29 @@ const ProductCategoryFormModal: React.FC = () => {
   // 🔹 Si estamos en edición, cargar el producto
   useEffect(() => {
     if (isEdit && id) {
-      if (productCategoryData) {
-        setProductCategory(productCategoryData);
+      if (warehouseData) {
+        setWarehouse(warehouseData);
         setFormData({
-          description: productCategoryData.description,
-          photoUrl: productCategoryData.photoUrl || '',
-          productCategoryName: productCategoryData.productCategoryName,
+          photoUrl: warehouseData.photoUrl || '',
+          location: warehouseData.location,
+          warehouseName: warehouseData.warehouseName,
         });
       }
     }
-  }, [isEdit, id, productCategoryData]);
+  }, [isEdit, id, warehouseData]);
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      if (isEdit && productCategory) {
-        await updateProductCategory({
+      if (isEdit && warehouse) {
+        await updateWarehouse({
           ...formData,
-          productCategoryId: productCategory.productCategoryId,
+          warehouseId: warehouse.warehouseId,
         });
       } else {
-        await createProductCategory(formData);
+        await createWarehouse(formData);
       }
       navigate('..'); // volver a /productos
     } catch (error) {
@@ -63,8 +62,8 @@ const ProductCategoryFormModal: React.FC = () => {
     }
   };
 
-  const isValidProductCategory = (category: CreateProductCategoryRequest): boolean => {
-    return category.productCategoryName.trim() !== '' && category.description.trim() !== '';
+  const isValidWarehouse = (category: CreateWarehouseRequest): boolean => {
+    return category.warehouseName.trim() !== '' && category.location.trim() !== '';
   };
 
   const handleChange = (
@@ -86,7 +85,7 @@ const ProductCategoryFormModal: React.FC = () => {
     <div className="product-form__overlay">
       <div className="product-form__form">
         <header className="form__header">
-          <h2 className="form__title">{isEdit ? `Editar categoria` : 'Agregar nueva categoria'}</h2>
+          <h2 className="form__title">{isEdit ? `Editar almacen` : 'Agregar nuevo almacen'}</h2>
           <button className="form__close-btn" onClick={() => navigate('..')}>
             <MdClose />
           </button>
@@ -94,29 +93,29 @@ const ProductCategoryFormModal: React.FC = () => {
 
         <form className="form__form" onSubmit={handleSubmit}>
           <div className="form__field">
-            <label className="form__label" htmlFor="productCategoryName">
+            <label className="form__label" htmlFor="warehouseName">
               Nombre *
             </label>
             <input
               type="text"
-              id="productCategoryName"
-              name="productCategoryName"
+              id="warehouseName"
+              name="warehouseName"
               className="form__input"
-              value={formData.productCategoryName}
+              value={formData.warehouseName}
               onChange={handleChange}
               required
             />
           </div>
 
           <div className="form__field">
-            <label className="form__label" htmlFor="description">
-              Descripción *
+            <label className="form__label" htmlFor="location">
+              Localización *
             </label>
             <textarea
-              id="description"
-              name="description"
+              id="location"
+              name="location"
               className="form__textarea"
-              value={formData.description}
+              value={formData.location}
               onChange={handleChange}
               rows={3}
               required
@@ -145,7 +144,7 @@ const ProductCategoryFormModal: React.FC = () => {
             <button
               type="submit"
               className="btn btn--submit"
-              disabled={loading || !isValidProductCategory(formData)}
+              disabled={loading || !isValidWarehouse(formData)}
             >
               {loading ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
             </button>
@@ -156,4 +155,4 @@ const ProductCategoryFormModal: React.FC = () => {
   );
 };
 
-export default ProductCategoryFormModal;
+export default WarehouseFormModal;

@@ -1,4 +1,3 @@
-// hooks/useCreateProduct.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type {
   CreateProductCategoryRequest,

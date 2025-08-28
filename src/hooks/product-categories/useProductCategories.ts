@@ -6,15 +6,14 @@ import type {
 } from '../../models/productCategory.model';
 
 export const useProductCategories = (filters?: FilterProductCategoriesDto) => {
-  // Obtener lista de productos
   const { data, error, isLoading, isFetching, refetch } = useQuery<ProductCategory[], Error>({
-    queryKey: ['productCategories', filters], // clave de cache depende de los filtros
+    queryKey: ['productCategories', filters], // 👈 clave estable
     queryFn: () => productCategoryService.getAllCategories(filters),
-    placeholderData: keepPreviousData, // 👈 mantiene datos al cambiar de página o filtros
+    placeholderData: keepPreviousData, // mantiene datos previos mientras carga
   });
 
   return {
-    productCategories: data ?? [], // 👈 categorias de productos
+    productCategories: data ?? [],
     isLoading,
     isFetching,
     error,

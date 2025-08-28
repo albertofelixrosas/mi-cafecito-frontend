@@ -14,3 +14,7 @@ export interface CreateWarehouseRequest {
 export interface UpdateWarehouseRequest extends Partial<CreateWarehouseRequest> {
   warehouseId: number;
 }
+
+export interface FilterWarehousesDto {
+  name?: string;
+}

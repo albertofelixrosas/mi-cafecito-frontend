@@ -5,9 +5,9 @@ import '../../styles/product-list.css';
 import { useProductCategories } from '../../hooks/product-categories/useProductCategories';
 import { useDeleteProductCategory } from '../../hooks/product-categories/useDeleteProductCategory';
 
-type ProductFiltersKeys = 'name';
+type ProductCategoriesFiltersKeys = 'name';
 
-const Products: React.FC = () => {
+const ProductCategories: React.FC = () => {
   const navigate = useNavigate();
   const {
     deleteProductCategory,
@@ -29,7 +29,10 @@ const Products: React.FC = () => {
   } = useProductCategories(filters);
 
   // 🔄 actualizar la URL (y por lo tanto los filtros)
-  const handleFilterChange = (key: ProductFiltersKeys, value: string | number | undefined) => {
+  const handleFilterChange = (
+    key: ProductCategoriesFiltersKeys,
+    value: string | number | undefined,
+  ) => {
     const newParams = new URLSearchParams(searchParams);
 
     if (value === undefined || value === '') {
@@ -84,7 +87,7 @@ const Products: React.FC = () => {
           <input
             type="text"
             className="form__search-input"
-            placeholder="Search products..."
+            placeholder="Buscar categorias..."
             value={filters.name || ''}
             onChange={e => handleFilterChange('name', e.target.value)}
           />
@@ -132,4 +135,4 @@ const Products: React.FC = () => {
   );
 };
 
-export default Products;
+export default ProductCategories;

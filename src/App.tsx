@@ -13,6 +13,7 @@ import Entradas from './pages/StockEntries/StockEntries';
 import Reportes from './pages/Reports/Reports';
 import Configuracion from './pages/Configuration/Configuration';
 import ProductCategoryFormModal from './pages/Categories/ProductCategoryForm';
+import WarehouseFormModal from './pages/Warehouses/WarehousesForm';
 
 function App() {
   return (
@@ -41,8 +42,8 @@ function App() {
             <Route path=":id/editar" element={<ProductoFormModal />} />
           </Route>
           <Route path="almacenes" element={<Almacenes />}>
-            <Route path="nuevo" element={<div>Agregar Almacén (Modal)</div>} />
-            <Route path=":id/editar" element={<div>Editar Almacén (Modal)</div>} />
+            <Route path="nuevo" element={<WarehouseFormModal />} />
+            <Route path=":id/editar" element={<WarehouseFormModal />} />
           </Route>
           <Route path="entradas" element={<Entradas />} />
           <Route path="reportes" element={<Reportes />} />

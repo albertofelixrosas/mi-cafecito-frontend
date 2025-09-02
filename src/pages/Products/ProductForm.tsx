@@ -38,6 +38,8 @@ const ProductFormModal: React.FC = () => {
       photoUrl: '',
       isElaborated: false,
       isPortioned: false,
+      barCode: '',
+      minStock: 1,
     },
   });
 
@@ -52,19 +54,30 @@ const ProductFormModal: React.FC = () => {
         setValue('productCategoryId', productData.productCategoryId);
         setValue('unitOfMeasurement', productData.unitOfMeasurement);
         setValue('description', productData.description);
-        setValue('photoUrl', productData.photoUrl || '');
+        setValue('photoUrl', productData.photoUrl || undefined);
         setValue('isElaborated', productData.isElaborated);
         setValue('isPortioned', productData.isPortioned);
+        setValue('barCode', productData.barCode || undefined);
+        setValue('minStock', productData.minStock);
       }
     }
   }, [isEdit, id, productData, setValue]);
 
   const onSubmit = async (formData: ProductSchema): Promise<void> => {
+    const normalizedData = {
+      ...formData,
+      barCode: formData.barCode === '' || !formData.barCode ? null : formData.barCode,
+      photoUrl: formData.photoUrl === '' || !formData.photoUrl ? null : formData.photoUrl,
+    };
+
     try {
       if (isEdit && product) {
-        await updateProduct({ ...formData, productId: product.productId });
+        await updateProduct({
+          ...normalizedData,
+          productId: product.productId,
+        });
       } else {
-        await createProduct(formData);
+        await createProduct(normalizedData);
       }
       navigate('..'); // volver a /productos
     } catch (error) {
@@ -159,7 +172,6 @@ const ProductFormModal: React.FC = () => {
               URL de la imagen (opcional)
             </label>
             <input
-              type="url"
               id="photoUrl"
               className="form__input"
               placeholder="https://example.com/image.jpg"
@@ -168,6 +180,29 @@ const ProductFormModal: React.FC = () => {
             {errors.photoUrl && (
               <span className="form__error-label">{errors.photoUrl.message}</span>
             )}
+          </div>
+
+          <div className="form__field">
+            <label className="form__label" htmlFor="minStock">
+              Stock minimo
+            </label>
+            <input
+              type="number"
+              id="minStock"
+              className="form__input"
+              {...register('minStock', { valueAsNumber: true })}
+            />
+            {errors.minStock && (
+              <span className="form__error-label">{errors.minStock.message}</span>
+            )}
+          </div>
+
+          <div className="form__field">
+            <label className="form__label" htmlFor="barCode">
+              Codigo de Barras (opcional)
+            </label>
+            <input type="text" id="barCode" className="form__input" {...register('barCode')} />
+            {errors.barCode && <span className="form__error-label">{errors.barCode.message}</span>}
           </div>
 
           <div className="form__checkboxes">

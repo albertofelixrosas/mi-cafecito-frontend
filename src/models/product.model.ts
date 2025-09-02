@@ -10,6 +10,8 @@ export interface Product {
   isPortioned: boolean;
   photoUrl: string;
   category: ProductCategory;
+  barCode?: string | null;
+  minStock: number;
 }
 
 export interface CreateProductRequest {
@@ -19,7 +21,9 @@ export interface CreateProductRequest {
   description: string;
   isElaborated: boolean;
   isPortioned: boolean;
-  photoUrl?: string;
+  photoUrl: string | null;
+  barCode: string | null;
+  minStock: number;
 }
 
 export interface UpdateProductRequest extends Partial<CreateProductRequest> {

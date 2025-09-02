@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import LoginForm from './components/LoginForm';
+import Login from './pages/Login/Login';
 import RegisterForm from './components/RegisterForm';
 import DashboardLayout from './components/DashboardLayout';
 import DashboardHome from './components/DashboardHome';
@@ -20,7 +20,7 @@ function App() {
     <AuthProvider>
       <Routes>
         {/* Rutas públicas */}
-        <Route path="/login" element={<LoginForm />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterForm />} />
 
         {/* Rutas protegidas con layout de dashboard */}

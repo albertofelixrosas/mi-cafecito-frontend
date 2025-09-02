@@ -15,6 +15,7 @@
   --color-text: #1c1c1c;
   --color-text-muted: #4a4a4a;
   --color-border: #d9dddb;
+  --color-bg-auth: var(--color-bg-alt); /* Fondo gris claro para pantallas de auth */
 
   /* ✅ Colores de estado */
   --color-success: #28a745; /* Verde éxito */
@@ -100,6 +101,7 @@
   --color-text: #e4e8e6;
   --color-text-muted: #a5b0ac;
   --color-border: #2b3b3f;
+  --color-bg-auth: var(--color-bg-alt); /* Fondo gris claro para pantallas de auth */
 
   /* ✅ Colores de estado en dark mode */
   --color-success: #28d17c;

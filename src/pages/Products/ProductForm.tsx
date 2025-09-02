@@ -5,11 +5,14 @@ import { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProductCategories } from '../../hooks/product-categories/useProductCategories';
-import type { Product, CreateProductRequest } from '../../models/product.model';
+import type { Product } from '../../models/product.model';
 import '../../styles/product-form.css';
 import { useProductById } from '../../hooks/products/useProductById';
 import { useCreateProduct } from '../../hooks/products/useCreateProduct';
 import { useUpdateProduct } from '../../hooks/products/useUpdateProduct';
+import { useForm } from 'react-hook-form';
+import { productSchema, type ProductSchema } from '../../schemas/product.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const ProductFormModal: React.FC = () => {
   const navigate = useNavigate();
@@ -18,17 +21,24 @@ const ProductFormModal: React.FC = () => {
   const { updateProduct } = useUpdateProduct();
   const { data: productData } = useProductById(id ? Number(id) : 0);
   const { productCategories } = useProductCategories();
-  const [loading, setLoading] = useState<boolean>(false);
   const [product, setProduct] = useState<Product | null>(null);
 
-  const [formData, setFormData] = useState<CreateProductRequest>({
-    productCategoryId: 0,
-    productName: '',
-    unitOfMeasurement: '',
-    description: '',
-    isElaborated: false,
-    isPortioned: false,
-    photoUrl: '',
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<ProductSchema>({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      productName: '',
+      productCategoryId: 0,
+      unitOfMeasurement: '',
+      description: '',
+      photoUrl: '',
+      isElaborated: false,
+      isPortioned: false,
+    },
   });
 
   const isEdit = Boolean(id);
@@ -38,32 +48,18 @@ const ProductFormModal: React.FC = () => {
     if (isEdit && id) {
       if (productData) {
         setProduct(productData);
-        setFormData({
-          productCategoryId: productData.productCategoryId,
-          productName: productData.productName,
-          unitOfMeasurement: productData.unitOfMeasurement,
-          description: productData.description,
-          isElaborated: productData.isElaborated,
-          isPortioned: productData.isPortioned,
-          photoUrl: productData.photoUrl || '',
-        });
+        setValue('productName', productData.productName);
+        setValue('productCategoryId', productData.productCategoryId);
+        setValue('unitOfMeasurement', productData.unitOfMeasurement);
+        setValue('description', productData.description);
+        setValue('photoUrl', productData.photoUrl || '');
+        setValue('isElaborated', productData.isElaborated);
+        setValue('isPortioned', productData.isPortioned);
       }
     }
-  }, [isEdit, id, productData]);
+  }, [isEdit, id, productData, setValue]);
 
-  const isValidProduct = (product: CreateProductRequest): boolean => {
-    return (
-      product.productName.trim() !== '' &&
-      product.productCategoryId > 0 &&
-      product.unitOfMeasurement.trim() !== '' &&
-      product.description.trim() !== ''
-    );
-  };
-
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    setLoading(true);
-
+  const onSubmit = async (formData: ProductSchema): Promise<void> => {
     try {
       if (isEdit && product) {
         await updateProduct({ ...formData, productId: product.productId });
@@ -73,23 +69,6 @@ const ProductFormModal: React.FC = () => {
       navigate('..'); // volver a /productos
     } catch (error) {
       console.error('Error saving product:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ): void => {
-    const { name, value, type } = e.target;
-
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else if (name === 'productCategoryId') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseInt(value) }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -105,7 +84,7 @@ const ProductFormModal: React.FC = () => {
           </button>
         </header>
 
-        <form className="form__form" onSubmit={handleSubmit}>
+        <form className="form__form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form__field">
             <label className="form__label" htmlFor="productName">
               Nombre *
@@ -113,12 +92,12 @@ const ProductFormModal: React.FC = () => {
             <input
               type="text"
               id="productName"
-              name="productName"
               className="form__input"
-              value={formData.productName}
-              onChange={handleChange}
-              required
+              {...register('productName')}
             />
+            {errors.productName && (
+              <span className="form__error-label">{errors.productName.message}</span>
+            )}
           </div>
 
           <div className="form__field">
@@ -127,11 +106,8 @@ const ProductFormModal: React.FC = () => {
             </label>
             <select
               id="productCategoryId"
-              name="productCategoryId"
               className="form__select"
-              value={formData.productCategoryId}
-              onChange={handleChange}
-              required
+              {...register('productCategoryId', { valueAsNumber: true })}
             >
               <option value={0} disabled>
                 Selecciona una categoría
@@ -142,6 +118,9 @@ const ProductFormModal: React.FC = () => {
                 </option>
               ))}
             </select>
+            {errors.productCategoryId && (
+              <span className="form__error-label">{errors.productCategoryId.message}</span>
+            )}
           </div>
 
           <div className="form__field">
@@ -151,13 +130,13 @@ const ProductFormModal: React.FC = () => {
             <input
               type="text"
               id="unitOfMeasurement"
-              name="unitOfMeasurement"
               className="form__input"
-              value={formData.unitOfMeasurement}
-              onChange={handleChange}
               placeholder="e.g., kg, liters, pieces"
-              required
+              {...register('unitOfMeasurement')}
             />
+            {errors.unitOfMeasurement && (
+              <span className="form__error-label">{errors.unitOfMeasurement.message}</span>
+            )}
           </div>
 
           <div className="form__field">
@@ -166,13 +145,13 @@ const ProductFormModal: React.FC = () => {
             </label>
             <textarea
               id="description"
-              name="description"
               className="form__textarea"
-              value={formData.description}
-              onChange={handleChange}
               rows={3}
-              required
+              {...register('description')}
             />
+            {errors.description && (
+              <span className="form__error-label">{errors.description.message}</span>
+            )}
           </div>
 
           <div className="form__field">
@@ -182,12 +161,13 @@ const ProductFormModal: React.FC = () => {
             <input
               type="url"
               id="photoUrl"
-              name="photoUrl"
               className="form__input"
-              value={formData.photoUrl}
-              onChange={handleChange}
               placeholder="https://example.com/image.jpg"
+              {...register('photoUrl')}
             />
+            {errors.photoUrl && (
+              <span className="form__error-label">{errors.photoUrl.message}</span>
+            )}
           </div>
 
           <div className="form__checkboxes">
@@ -195,28 +175,30 @@ const ProductFormModal: React.FC = () => {
               <input
                 type="checkbox"
                 id="isElaborated"
-                name="isElaborated"
                 className="form__checkbox"
-                checked={formData.isElaborated}
-                onChange={handleChange}
+                {...register('isElaborated')}
               />
               <label className="form__checkbox-label" htmlFor="isElaborated">
                 Es Elaborado
               </label>
+              {errors.isElaborated && (
+                <span className="form__error-label">{errors.isElaborated.message}</span>
+              )}
             </div>
 
             <div className="form__checkbox-field">
               <input
                 type="checkbox"
                 id="isPortioned"
-                name="isPortioned"
                 className="form__checkbox"
-                checked={formData.isPortioned}
-                onChange={handleChange}
+                {...register('isPortioned')}
               />
               <label className="form__checkbox-label" htmlFor="isPortioned">
                 Es porcionado
               </label>
+              {errors.isPortioned && (
+                <span className="form__error-label">{errors.isPortioned.message}</span>
+              )}
             </div>
           </div>
 
@@ -224,12 +206,8 @@ const ProductFormModal: React.FC = () => {
             <button type="button" className="btn btn--cancel" onClick={() => navigate('..')}>
               Cancelar
             </button>
-            <button
-              type="submit"
-              className="btn btn--submit"
-              disabled={loading || !isValidProduct(formData)}
-            >
-              {loading ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
+            <button type="submit" className="btn btn--submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
             </button>
           </div>
         </form>

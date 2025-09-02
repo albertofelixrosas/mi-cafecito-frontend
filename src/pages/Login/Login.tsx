@@ -4,12 +4,20 @@ import '../../styles/login.css'; // estilos extra para la pantalla
 import { useAuth } from '../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, type LoginSchema } from '../../schemas/login.schema';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [remember, setRemember] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -17,8 +25,7 @@ const LoginPage = () => {
 
   const from = location.state?.from?.pathname || '/dashboard';
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async ({ email, password }: LoginSchema) => {
     setIsLoading(true);
     try {
       const success = await login(email, password);
@@ -48,18 +55,13 @@ const LoginPage = () => {
             <h2 className="form__title">Iniciar sesión</h2>
           </div>
 
-          <form className="form__form" onSubmit={handleSubmit} noValidate>
+          <form className="form__form" onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="form__field">
               <label htmlFor="email" className="form__label">
                 Correo electrónico
               </label>
-              <input
-                type="email"
-                id="email"
-                className="form__input"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
+              <input type="email" id="email" className="form__input" {...register('email')} />
+              {errors.email && <span className="form__error-label">{errors.email.message}</span>}
             </div>
 
             <div className="form__field">
@@ -70,9 +72,11 @@ const LoginPage = () => {
                 type="password"
                 id="password"
                 className="form__input"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                {...register('password')}
               />
+              {errors.password && (
+                <span className="form__error-label">{errors.password.message}</span>
+              )}
             </div>
 
             <div className="form__checkboxes">
@@ -91,15 +95,7 @@ const LoginPage = () => {
             </div>
 
             <div className="form__actions">
-              <button
-                type="button"
-                className="btn btn--cancel"
-                onClick={() => {
-                  setEmail('');
-                  setPassword('');
-                  setRemember(false);
-                }}
-              >
+              <button type="button" className="btn btn--cancel">
                 Cancelar
               </button>
               <button

@@ -8,7 +8,10 @@ import '../../styles/product-form.css';
 import { useCreateWarehouse } from '../../hooks/warehouses/useCreateWarehouse';
 import { useUpdateWarehouse } from '../../hooks/warehouses/useUpdateWarehouse';
 import { useWarehouseById } from '../../hooks/warehouses/useWarehouseById';
-import type { CreateWarehouseRequest, Warehouse } from '../../models/warehouse.model';
+import type { Warehouse } from '../../models/warehouse.model';
+import { useForm } from 'react-hook-form';
+import { warehouseSchema, type WarehouseSchema } from '../../schemas/warehouses.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const WarehouseFormModal: React.FC = () => {
   const navigate = useNavigate();
@@ -16,13 +19,20 @@ const WarehouseFormModal: React.FC = () => {
   const { createWarehouse } = useCreateWarehouse();
   const { updateWarehouse } = useUpdateWarehouse();
   const { data: warehouseData } = useWarehouseById(id ? Number(id) : 0);
-  const [loading, setLoading] = useState<boolean>(false);
   const [warehouse, setWarehouse] = useState<Warehouse | null>(null);
 
-  const [formData, setFormData] = useState<CreateWarehouseRequest>({
-    warehouseName: '',
-    location: '',
-    photoUrl: '',
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<WarehouseSchema>({
+    resolver: zodResolver(warehouseSchema),
+    defaultValues: {
+      warehouseName: '',
+      location: '',
+      photoUrl: '',
+    },
   });
 
   const isEdit = Boolean(id);
@@ -32,19 +42,14 @@ const WarehouseFormModal: React.FC = () => {
     if (isEdit && id) {
       if (warehouseData) {
         setWarehouse(warehouseData);
-        setFormData({
-          photoUrl: warehouseData.photoUrl || '',
-          location: warehouseData.location,
-          warehouseName: warehouseData.warehouseName,
-        });
+        setValue('warehouseName', warehouseData.warehouseName);
+        setValue('location', warehouseData.location);
+        setValue('photoUrl', warehouseData.photoUrl || '');
       }
     }
-  }, [isEdit, id, warehouseData]);
+  }, [isEdit, id, warehouseData, setValue]);
 
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    setLoading(true);
-
+  const onSubmit = async (formData: WarehouseSchema): Promise<void> => {
     try {
       if (isEdit && warehouse) {
         await updateWarehouse({
@@ -57,27 +62,6 @@ const WarehouseFormModal: React.FC = () => {
       navigate('..'); // volver a /productos
     } catch (error) {
       console.error('Error saving product:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const isValidWarehouse = (category: CreateWarehouseRequest): boolean => {
-    return category.warehouseName.trim() !== '' && category.location.trim() !== '';
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ): void => {
-    const { name, value, type } = e.target;
-
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else if (name === 'productCategoryId') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseInt(value) }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -91,7 +75,7 @@ const WarehouseFormModal: React.FC = () => {
           </button>
         </header>
 
-        <form className="form__form" onSubmit={handleSubmit}>
+        <form className="form__form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form__field">
             <label className="form__label" htmlFor="warehouseName">
               Nombre *
@@ -99,27 +83,22 @@ const WarehouseFormModal: React.FC = () => {
             <input
               type="text"
               id="warehouseName"
-              name="warehouseName"
               className="form__input"
-              value={formData.warehouseName}
-              onChange={handleChange}
-              required
+              {...register('warehouseName')}
             />
+            {errors.warehouseName && (
+              <span className="form__error-label">{errors.warehouseName.message}</span>
+            )}
           </div>
 
           <div className="form__field">
             <label className="form__label" htmlFor="location">
               Localización *
             </label>
-            <textarea
-              id="location"
-              name="location"
-              className="form__textarea"
-              value={formData.location}
-              onChange={handleChange}
-              rows={3}
-              required
-            />
+            <textarea id="location" className="form__textarea" rows={3} {...register('location')} />
+            {errors.location && (
+              <span className="form__error-label">{errors.location.message}</span>
+            )}
           </div>
 
           <div className="form__field">
@@ -129,24 +108,21 @@ const WarehouseFormModal: React.FC = () => {
             <input
               type="url"
               id="photoUrl"
-              name="photoUrl"
               className="form__input"
-              value={formData.photoUrl}
-              onChange={handleChange}
               placeholder="https://example.com/image.jpg"
+              {...register('photoUrl')}
             />
+            {errors.photoUrl && (
+              <span className="form__error-label">{errors.photoUrl.message}</span>
+            )}
           </div>
 
           <div className="form__actions">
             <button type="button" className="btn btn--cancel" onClick={() => navigate('..')}>
               Cancelar
             </button>
-            <button
-              type="submit"
-              className="btn btn--submit"
-              disabled={loading || !isValidWarehouse(formData)}
-            >
-              {loading ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
+            <button type="submit" className="btn btn--submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
             </button>
           </div>
         </form>

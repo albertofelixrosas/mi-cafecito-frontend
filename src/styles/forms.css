@@ -108,6 +108,12 @@
   border-color: #3498db;
 }
 
+.form__error-label {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
 /* Checkboxes */
 .form__checkboxes {
   display: flex;

@@ -4,12 +4,17 @@ import type React from 'react';
 import { useState, useEffect } from 'react';
 import { MdClose } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { CreateProductCategoryRequest } from '../../models/productCategory.model';
 import '../../styles/product-form.css';
 import { useProductCategoryById } from '../../hooks/product-categories/useProductCategoryById';
 import { useCreateProductCategory } from '../../hooks/product-categories/useCreateProductCategory';
 import { useUpdateProductCategory } from '../../hooks/product-categories/useUpdateProductCategory';
 import type { ProductCategory } from '../../models/productCategory.model';
+import { useForm } from 'react-hook-form';
+import {
+  productCategorySchema,
+  type ProductCategorySchema,
+} from '../../schemas/product-category.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const ProductCategoryFormModal: React.FC = () => {
   const navigate = useNavigate();
@@ -17,13 +22,14 @@ const ProductCategoryFormModal: React.FC = () => {
   const { createProductCategory } = useCreateProductCategory();
   const { updateProductCategory } = useUpdateProductCategory();
   const { data: productCategoryData } = useProductCategoryById(id ? Number(id) : 0);
-  const [loading, setLoading] = useState<boolean>(false);
   const [productCategory, setProductCategory] = useState<ProductCategory | null>(null);
-
-  const [formData, setFormData] = useState<CreateProductCategoryRequest>({
-    productCategoryName: '',
-    description: '',
-    photoUrl: '',
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<ProductCategorySchema>({
+    resolver: zodResolver(productCategorySchema),
   });
 
   const isEdit = Boolean(id);
@@ -33,19 +39,14 @@ const ProductCategoryFormModal: React.FC = () => {
     if (isEdit && id) {
       if (productCategoryData) {
         setProductCategory(productCategoryData);
-        setFormData({
-          description: productCategoryData.description,
-          photoUrl: productCategoryData.photoUrl || '',
-          productCategoryName: productCategoryData.productCategoryName,
-        });
+        setValue('description', productCategoryData.description);
+        setValue('photoUrl', productCategoryData.photoUrl);
+        setValue('productCategoryName', productCategoryData.productCategoryName);
       }
     }
-  }, [isEdit, id, productCategoryData]);
+  }, [isEdit, id, productCategoryData, setValue]);
 
-  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
-    setLoading(true);
-
+  const onSubmit = async (formData: ProductCategorySchema): Promise<void> => {
     try {
       if (isEdit && productCategory) {
         await updateProductCategory({
@@ -58,27 +59,6 @@ const ProductCategoryFormModal: React.FC = () => {
       navigate('..'); // volver a /productos
     } catch (error) {
       console.error('Error saving product:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const isValidProductCategory = (category: CreateProductCategoryRequest): boolean => {
-    return category.productCategoryName.trim() !== '' && category.description.trim() !== '';
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
-  ): void => {
-    const { name, value, type } = e.target;
-
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else if (name === 'productCategoryId') {
-      setFormData(prev => ({ ...prev, [name]: Number.parseInt(value) }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
 
@@ -92,7 +72,7 @@ const ProductCategoryFormModal: React.FC = () => {
           </button>
         </header>
 
-        <form className="form__form" onSubmit={handleSubmit}>
+        <form className="form__form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form__field">
             <label className="form__label" htmlFor="productCategoryName">
               Nombre *
@@ -100,12 +80,12 @@ const ProductCategoryFormModal: React.FC = () => {
             <input
               type="text"
               id="productCategoryName"
-              name="productCategoryName"
               className="form__input"
-              value={formData.productCategoryName}
-              onChange={handleChange}
-              required
+              {...register('productCategoryName')}
             />
+            {errors.productCategoryName && (
+              <span className="form__error-label">{errors.productCategoryName.message}</span>
+            )}
           </div>
 
           <div className="form__field">
@@ -114,13 +94,13 @@ const ProductCategoryFormModal: React.FC = () => {
             </label>
             <textarea
               id="description"
-              name="description"
               className="form__textarea"
-              value={formData.description}
-              onChange={handleChange}
+              {...register('description')}
               rows={3}
-              required
             />
+            {errors.description && (
+              <span className="form__error-label">{errors.description.message}</span>
+            )}
           </div>
 
           <div className="form__field">
@@ -128,26 +108,22 @@ const ProductCategoryFormModal: React.FC = () => {
               URL de la imagen (opcional)
             </label>
             <input
-              type="url"
               id="photoUrl"
-              name="photoUrl"
               className="form__input"
-              value={formData.photoUrl}
-              onChange={handleChange}
+              {...register('photoUrl')}
               placeholder="https://example.com/image.jpg"
             />
+            {errors.photoUrl && (
+              <span className="form__error-label">{errors.photoUrl.message}</span>
+            )}
           </div>
 
           <div className="form__actions">
             <button type="button" className="btn btn--cancel" onClick={() => navigate('..')}>
               Cancelar
             </button>
-            <button
-              type="submit"
-              className="btn btn--submit"
-              disabled={loading || !isValidProductCategory(formData)}
-            >
-              {loading ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
+            <button type="submit" className="btn btn--submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Guardando...' : isEdit ? 'Actualizar' : 'Crear'}
             </button>
           </div>
         </form>

@@ -14,6 +14,7 @@ import Reportes from './pages/Reports/Reports';
 import Configuracion from './pages/Configuration/Configuration';
 import ProductCategoryFormModal from './pages/Categories/ProductCategoryForm';
 import WarehouseFormModal from './pages/Warehouses/WarehousesForm';
+import NotFoundPage from './pages/NotFoundPage/NotFound';
 
 function App() {
   return (
@@ -57,7 +58,7 @@ function App() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
         {/* Ruta 404 */}
-        <Route path="*" element={<div>Página no encontrada</div>} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </AuthProvider>
   );

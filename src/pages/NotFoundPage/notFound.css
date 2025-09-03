@@ -13,7 +13,7 @@
   font-size: 6rem;
   font-weight: var(--font-weight-bold);
   color: var(--color-accent-contrast);
-  text-shadow: 2px 2px var(--color-primary-dark);
+  text-shadow: 2px 2px var(--color-text-muted);
 }
 
 .not-found__subtitle {

@@ -6,9 +6,4 @@ export const createUserSchema = z.object({
   role: z.string().min(1, 'El campo rol no puede estar vacio'),
 });
 
-export const updateUserSchema = createUserSchema.extend({
-  createdAt: z.string(),
-});
-
 export type CreateUserSchema = z.infer<typeof createUserSchema>;
-export type UpdateUserSchema = z.infer<typeof updateUserSchema>;

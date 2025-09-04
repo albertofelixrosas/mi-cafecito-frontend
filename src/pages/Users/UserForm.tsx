@@ -7,16 +7,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../../styles/product-form.css'; // puedes renombrar si quieres "user-form.css"
 import { useCreateUser } from '../../hooks/users/useCreateUser';
 import type { User } from '../../models/user.model';
-import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useUpdateUser } from '../../hooks/users/useUpdateUser';
 import { useUserById } from '../../hooks/users/useUserById';
-import {
-  createUserSchema,
-  updateUserSchema,
-  type CreateUserSchema,
-  type UpdateUserSchema,
-} from '../../schemas/user.schema';
+import { createUserSchema, type CreateUserSchema } from '../../schemas/user.schema';
+import { useForm } from 'react-hook-form';
 
 const UserFormModal: React.FC = () => {
   const navigate = useNavigate();
@@ -27,16 +22,14 @@ const UserFormModal: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
 
   const isEdit = Boolean(id);
-  const schema = isEdit ? updateUserSchema : createUserSchema;
 
   const {
     register,
     handleSubmit,
     setValue,
-    control,
     formState: { errors, isSubmitting },
-  } = useForm<UpdateUserSchema | CreateUserSchema>({
-    resolver: zodResolver(schema),
+  } = useForm<CreateUserSchema>({
+    resolver: zodResolver(createUserSchema),
   });
 
   // 🔹 Si estamos en edición, cargar usuario
@@ -47,19 +40,15 @@ const UserFormModal: React.FC = () => {
         setValue('name', userData.name);
         setValue('lastname', userData.lastname);
         setValue('role', userData.role);
-        setValue('createdAt', userData.createdAt);
       }
     }
   }, [isEdit, id, userData, setValue]);
 
-  const formatDateForInput = (dateString?: string) => dateString?.split('T')[0] || '';
-
-  const onSubmit = async (formData: UpdateUserSchema | CreateUserSchema): Promise<void> => {
+  const onSubmit = async (formData: CreateUserSchema): Promise<void> => {
     try {
       if (isEdit && user) {
-        const updateFormData = formData as UpdateUserSchema;
         await updateUser({
-          ...updateFormData,
+          ...formData,
           userId: user.userId,
         });
       } else {
@@ -111,30 +100,6 @@ const UserFormModal: React.FC = () => {
             </select>
             {errors.role && <span className="form__error-label">{errors.role.message}</span>}
           </div>
-
-          {isEdit && (
-            <div className="form__field">
-              <label className="form__label" htmlFor="createdAt">
-                Fecha de Registro *
-              </label>
-              <Controller
-                control={control}
-                name="createdAt"
-                render={({ field }) => (
-                  <input
-                    type="date"
-                    id="createdAt"
-                    className="form__input"
-                    value={formatDateForInput(field.value)} // muestra solo YYYY-MM-DD
-                    onChange={field.onChange} // react-hook-form captura el cambio
-                  />
-                )}
-              />
-              {'createdAt' in errors && errors.createdAt && (
-                <span className="form__error-label">{errors.createdAt.message}</span>
-              )}
-            </div>
-          )}
 
           <div className="form__actions">
             <button type="button" className="btn btn--cancel" onClick={() => navigate('..')}>

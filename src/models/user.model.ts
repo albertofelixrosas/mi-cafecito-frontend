@@ -15,5 +15,4 @@ export interface CreateUserRequest {
 
 export interface UpdateUserRequest extends Partial<CreateUserRequest> {
   userId: number;
-  createdAt: string;
 }

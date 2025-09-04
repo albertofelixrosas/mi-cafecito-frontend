@@ -13,6 +13,7 @@ import {
   MdArrowCircleUp,
 } from 'react-icons/md';
 import '../styles/sidebar.css';
+import { FaUser } from 'react-icons/fa';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { id: 'almacenes', label: 'ALMACENES', icon: MdWarehouse, path: '/almacenes' },
     { id: 'entradas', label: 'ENTRADAS', icon: MdArrowCircleDown, path: '/entradas' },
     { id: 'salidas', label: 'SALIDAS', icon: MdArrowCircleUp, path: '/salidas' },
+    { id: 'users', label: 'USUARIOS', icon: FaUser, path: '/usuarios' },
     // { id: 'movimientos', label: 'MOVIMIENTOS', icon: MdSwapHoriz, path: '/movimientos' },
     { id: 'reportes', label: 'REPORTES', icon: MdAssessment, path: '/reportes' },
     {

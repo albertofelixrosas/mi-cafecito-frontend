@@ -15,6 +15,8 @@ import Configuracion from './pages/Configuration/Configuration';
 import ProductCategoryFormModal from './pages/Categories/ProductCategoryForm';
 import WarehouseFormModal from './pages/Warehouses/WarehousesForm';
 import NotFoundPage from './pages/NotFoundPage/NotFound';
+import Users from './pages/Users/Users';
+import UserFormModal from './pages/Users/UserForm';
 
 function App() {
   return (
@@ -49,6 +51,10 @@ function App() {
           <Route path="entradas" element={<Entradas />}>
             <Route path="nuevo" element={<div>Formulario de nueva entrada</div>} />
             <Route path=":id/editar" element={<div>Formulario de editar entrada</div>} />
+          </Route>
+          <Route path="usuarios" element={<Users />}>
+            <Route path="nuevo" element={<UserFormModal />} />
+            <Route path=":id/editar" element={<UserFormModal />} />
           </Route>
           <Route path="reportes" element={<Reportes />} />
           <Route path="configuracion" element={<Configuracion />} />

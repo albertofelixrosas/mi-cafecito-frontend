@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 
-import type { AuthContextType, User, RegisterData } from '../types/auth';
+import type { AuthContextType, User, RegisterData, LoginResponse } from '../types/auth';
+import { apiService } from '../services/api.service';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -21,28 +22,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (identifier: string, password: string): Promise<boolean> => {
     setIsLoading(true);
+    try {
+      // Llamada al backend
+      const response = await apiService.post<LoginResponse>('/auth/login', {
+        identifier,
+        password,
+      });
 
-    // Simular delay de API
-    await new Promise(resolve => setTimeout(resolve, 1000));
+      const { user, accessToken, refreshToken } = response;
 
-    // Validación simple para simulación
-    if (email && password) {
-      const mockUser: User = {
-        id: '1',
-        email: email,
-        name: email.split('@')[0],
-      };
+      // Guardar token y user
+      localStorage.setItem('authToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(user));
+      setUser({
+        id: user.user_id.toString(),
+        name: user.fullName,
+      });
 
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      setIsLoading(false);
       return true;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
-    return false;
   };
 
   const register = async (userData: RegisterData): Promise<boolean> => {
@@ -70,7 +76,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const newUser: User = {
       id: Date.now().toString(),
-      email: userData.email,
       name: userData.name,
     };
 
@@ -91,6 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
   };
 
   return (

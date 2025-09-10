@@ -14,6 +14,7 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -25,7 +26,7 @@ const LoginPage = () => {
 
   const from = location.state?.from?.pathname || '/dashboard';
 
-  const onSubmit = async ({ email, password }: LoginSchema) => {
+  const onSubmit = async ({ identifier: email, password }: LoginSchema) => {
     setIsLoading(true);
     try {
       const success = await login(email, password);
@@ -33,6 +34,8 @@ const LoginPage = () => {
         navigate(from, { replace: true });
       } else {
         toast.error('Credenciales inválidas');
+        setError('identifier', { message: 'Credenciales invalidas' });
+        setError('password', { message: 'Credenciales invalidas' });
       }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Error al iniciar sesión');
@@ -58,10 +61,12 @@ const LoginPage = () => {
           <form className="form__form" onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="form__field">
               <label htmlFor="email" className="form__label">
-                Correo electrónico
+                Usuario, correo o teléfono
               </label>
-              <input type="email" id="email" className="form__input" {...register('email')} />
-              {errors.email && <span className="form__error-label">{errors.email.message}</span>}
+              <input type="text" id="email" className="form__input" {...register('identifier')} />
+              {errors.identifier && (
+                <span className="form__error-label">{errors.identifier.message}</span>
+              )}
             </div>
 
             <div className="form__field">

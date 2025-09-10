@@ -17,6 +17,7 @@ import WarehouseFormModal from './pages/Warehouses/WarehousesForm';
 import NotFoundPage from './pages/NotFoundPage/NotFound';
 import Users from './pages/Users/Users';
 import UserFormModal from './pages/Users/UserForm';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
         {/* Ruta 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
+      <Toaster position="top-center" /> {/* 👈 Aquí se montan los toasts */}
     </AuthProvider>
   );
 }

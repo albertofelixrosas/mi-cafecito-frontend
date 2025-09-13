@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
       setUser({
-        id: user.user_id.toString(),
+        id: user.userId,
         name: user.fullName,
       });
 
@@ -52,51 +52,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const register = async (userData: RegisterData): Promise<boolean> => {
-    setIsLoading(true);
-
-    // Simular delay de API
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    // Validación básica
-    if (userData.password !== userData.confirmPassword) {
-      setIsLoading(false);
-      return false;
-    }
-
-    // Verificar si el usuario ya existe (simulación)
-    const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    const userExists = existingUsers.some(
-      (user: { email: string }) => user.email === userData.email,
-    );
-
-    if (userExists) {
-      setIsLoading(false);
-      return false;
-    }
-
-    const newUser: User = {
-      id: Date.now().toString(),
-      name: userData.name,
-    };
-
-    // Guardar usuario registrado
-    existingUsers.push({
-      email: userData.email,
-      password: userData.password, // En una app real, NUNCA guardes contraseñas en texto plano
-      name: userData.name,
-    });
-
-    localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
-    setUser(newUser);
-    localStorage.setItem('user', JSON.stringify(newUser));
-    setIsLoading(false);
-    return true;
+    console.log({ userData });
+    return true; // Falta implementar el registro
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
     localStorage.removeItem('authToken');
+    localStorage.removeItem('user');
   };
 
   return (

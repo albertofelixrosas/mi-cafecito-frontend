@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -22,7 +22,7 @@ export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   user: {
-    user_id: number;
+    userId: number;
     fullName: string;
   };
 }
